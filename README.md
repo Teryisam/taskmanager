@@ -1,7 +1,7 @@
 # Task Management System
 
 ## Overview
-A simple task management system with user authentication, CRUD operations for tasks, real-time updates using WebSockets, and data persistence using MySQL.
+A simple task management system with user authentication, CRUD operations for tasks, real-time updates using WebSockets, and data persistence using MySQL. This was implemented with nodejs and expressjs.
 
 ## Features
 - User authentication with JWT
