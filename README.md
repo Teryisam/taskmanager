@@ -14,8 +14,8 @@ A simple task management system with user authentication, CRUD operations for ta
 
 1. Clone the repository:
    ```bash
-   git clone `https://github.com/Teryisam/taskmanager.git`
-   cd project-root
+   git clone https://github.com/Teryisam/taskmanager.git
+   cd taskmanager
    ```
 
 2. Install dependencies:
