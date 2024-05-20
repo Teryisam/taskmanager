@@ -14,7 +14,7 @@ A simple task management system with user authentication, CRUD operations for ta
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone `https://github.com/Teryisam/taskmanager.git`
    cd project-root
    ```
 
