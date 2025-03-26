@@ -9,6 +9,9 @@ A simple task management system with user authentication, CRUD operations for ta
 - Real-time updates with WebSockets
 - Input validation
 - Data persistence with MySQL
+- Two frontend testing options:
+   - A default UI for API testing.
+   - A console-based event listener to observe real-time task events in the browser.
 
 ## Installation
 
@@ -38,7 +41,22 @@ A simple task management system with user authentication, CRUD operations for ta
    node server.js
    ```
 
-5. Open `http://localhost:3000` in your browser to view the client.
+5. Choose Your Frontend
+   Inside the public/ directory, there are two HTML files:
+   
+   index.html → Default UI for API testing.
+   
+   index.html.console_listen_in_the_browser → Console-based event listener.
+   
+   To switch between them:
+   
+   Use the Default UI (Recommended for testing the API visually):
+   ✅ No changes needed, as index.html is already set.
+   
+   Use the Console-based Listener (Logs events in the browser console):
+   🔄 Rename index.html to index.html.default_ui, and rename index.html.console_listen_in_the_browser to index.html.
+   
+   Then, open http://localhost:3000 in your browser to view the client.
 
 ## API Endpoints
 
