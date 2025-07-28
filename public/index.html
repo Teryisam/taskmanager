@@ -214,7 +214,7 @@
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify({ title })
         }, (task) => {
-          addTaskToUI(task);
+          // addTaskToUI(task);
           taskInput.value = "";
         }, null).finally(() => addTaskBtn.disabled = false);
       };
