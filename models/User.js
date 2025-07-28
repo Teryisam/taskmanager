@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const bcrypt = require('bcrypt');
 
-const User = sequelize.define('User', {
+const User = sequelize.define('UserTable', {
   username: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -14,7 +14,7 @@ const User = sequelize.define('User', {
   },
 });
 
-User.beforeCreate(async (user, options) => {
+UserTable.beforeCreate(async (user, options) => {
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
 });
