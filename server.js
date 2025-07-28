@@ -51,7 +51,7 @@ const createDatabase = async () => {
 const startServer = async () => {
   await createDatabase();
 
-  sequelize.sync({ force: true }).then(() => {
+  sequelize.sync().then(() => {
     server.listen(3000, () => {
       console.log('Server started on port 3000');
     });
