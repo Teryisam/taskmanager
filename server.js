@@ -51,14 +51,16 @@ const createDatabase = async () => {
 const startServer = async () => {
   await createDatabase();
 
-  sequelize.sync().then(() => {
-    server.listen(3000, () => {
-      console.log('Server started on port 3000');
+  try {
+    await sequelize.sync();
+    const PORT = process.env.PORT || 3010;
+    server.listen(PORT, () => {
+      console.log(`Server started on port ${PORT}`);
     });
-  }).catch(error => {
+  } catch (error) {
     console.error('Unable to sync database:', error);
     process.exit(1); // Exit the process with an error code
-  });
+  }
 };
 
 startServer();

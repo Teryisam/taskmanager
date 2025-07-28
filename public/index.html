@@ -80,6 +80,22 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const socket = io();
+      // Real-time updates
+        socket.on("taskCreated", (task) => {
+        addTaskToUI(task);
+        });
+
+        socket.on("taskUpdated", (task) => {
+        const existing = document.querySelector(`[data-id="${task.id}"]`);
+        if (existing) existing.remove();
+        addTaskToUI(task);
+        });
+
+        socket.on("taskDeleted", ({ id }) => {
+        const existing = document.querySelector(`[data-id="${id}"]`);
+        if (existing) existing.remove();
+        });
+
       const taskList = document.getElementById("taskList");
       const taskInput = document.getElementById("taskInput");
       const addTaskBtn = document.getElementById("addTask");
@@ -203,39 +219,80 @@
         }, null).finally(() => addTaskBtn.disabled = false);
       };
 
-      function addTaskToUI(task) {
+        function addTaskToUI(task) {
         const li = document.createElement("li");
         li.className = "list-group-item d-flex justify-content-between align-items-center";
-        li.setAttribute("data-id", task.id);
+        li.dataset.id = task.id;
         li.innerHTML = `
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input task-checkbox" ${task.completed ? "checked" : ""}>
-            <label class="form-check-label ${task.completed ? "text-decoration-line-through" : ""}">${task.title}</label>
-          </div>
-          <div>
-            <button class="btn btn-warning btn-sm me-1 edit-btn">Edit</button>
-            <button class="btn btn-danger btn-sm delete-btn">Delete</button>
-          </div>
+            <div class="form-check">
+            <input class="form-check-input task-checkbox" type="checkbox" ${task.completed ? "checked" : ""}>
+            <label class="form-check-label ${task.completed ? "text-decoration-line-through" : ""}">
+                ${task.title}
+            </label>
+            </div>
+            <div>
+            <button class="btn btn-sm btn-outline-primary edit-btn">Edit</button>
+            <button class="btn btn-sm btn-outline-danger delete-btn">Delete</button>
+            </div>
         `;
 
-        li.querySelector(".edit-btn").onclick = () => {
-          editId = task.id;
-          document.getElementById("editTaskTitle").value = task.title;
-          new bootstrap.Modal(document.getElementById("editModal")).show();
+        // Toggle task completion
+        // li.querySelector(".task-checkbox").onchange = (e) => {
+        //     const completed = e.target.checked;
+        //     handleRequest(`/api/tasks/${task.id}`, {
+        //     method: "PATCH",
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         Authorization: `Bearer ${token}`
+        //     },
+        //     body: JSON.stringify({ completed })
+        //     }, (updatedTask) => {
+        //     const label = li.querySelector(".form-check-label");
+        //     if (completed) {
+        //         label.classList.add("text-decoration-line-through");
+        //     } else {
+        //         label.classList.remove("text-decoration-line-through");
+        //     }
+        //     showToast("Task updated", "info");
+        //     });
+        // };
+        // Toggle task completion
+        li.querySelector(".task-checkbox").onchange = (e) => {
+        const completed = e.target.checked;
+        handleRequest(`/api/tasks/${task.id}`, {
+            method: "PATCH",
+            headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ completed })
+        }, (updatedTask) => {
+            const label = li.querySelector(".form-check-label");
+            label.classList.toggle("text-decoration-line-through", updatedTask.completed);
+            showToast(`Task marked as ${updatedTask.completed ? "completed" : "incomplete"}`, "info");
+        });
         };
 
+        // Edit handler
+        li.querySelector(".edit-btn").onclick = () => {
+            editId = task.id;
+            document.getElementById("editTaskTitle").value = task.title;
+            new bootstrap.Modal(document.getElementById("editModal")).show();
+        };
+
+        // Delete handler
         li.querySelector(".delete-btn").onclick = () => {
-          handleRequest(`/api/tasks/${task.id}`, {
+            handleRequest(`/api/tasks/${task.id}`, {
             method: "DELETE",
             headers: { Authorization: `Bearer ${token}` }
-          }, () => {
+            }, () => {
             li.remove();
             showToast("Task deleted", "danger");
-          });
+            });
         };
 
-        taskList.appendChild(li);
-      }
+        taskList.prepend(li);
+        }
 
       document.getElementById("saveEdit").onclick = () => {
         const newTitle = document.getElementById("editTaskTitle").value.trim();
