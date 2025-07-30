@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Task Manager</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const socket = io();
+
+      socket.on('taskCreated', (task) => {
+        console.log('Task Created:', task);
+      });
+
+      socket.on('taskUpdated', (task) => {
+        console.log('Task Updated:', task);
+      });
+
+      socket.on('taskDeleted', (task) => {
+        console.log('Task Deleted:', task);
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1>Task Manager</h1>
+</body>
+</html>
